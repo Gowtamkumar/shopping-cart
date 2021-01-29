@@ -26,12 +26,17 @@
                      <div class="col-md-5 center-item">
                         <div class="input-group number-spinner">
 
-                           <button class="btn btn-default" id="decreasement"><i class="fas fa-minus"></i></button>
-                           <input type="text" class="form-control text-center" name = "" id="indevalue" value="1">
-                           <button class="btn btn-default" id="increasement"><i class="fas fa-plus"></i></button>
+                           <button class="btn btn-default" onclick="handelProductChange('case', false)">
+                              <i class="fas fa-minus"></i>
+                           </button>
+                           <input type="text" class="form-control text-center" name="" id="case-quantity" value="1">
+
+                           <button class="btn btn-default" onclick="handelProductChange('case', true)">
+                              <i class="fas fa-plus"></i>
+                           </button>
 
                         </div>
-                        <h5>$1219</h5>
+                        <h5>$<span id="case-productPriceUpdate">1219</span> </h5>
                         <img src="images/remove.png" alt="" class="remove-item">
                      </div>
                   </div>
@@ -45,11 +50,13 @@
                      </div>
                      <div class="col-md-5 center-item">
                         <div class="input-group number-spinner">
-                           <button class="btn btn-default"><i class="fas fa-minus"></i></button>
-                           <input type="text" class="form-control text-center" value="1">
-                           <button class="btn btn-default"><i class="fas fa-plus"></i></button>
+                           <button class="btn btn-default" onclick="handelProductChange('phone', false)"><i
+                                 class="fas fa-minus"></i></button>
+                           <input type="text" class="form-control text-center" value="1" name="" id="phone-quantity">
+                           <button class="btn btn-default" onclick="handelProductChange('phone', true)"><i
+                                 class="fas fa-plus"></i></button>
                         </div>
-                        <h5>$59</h5>
+                        <h5>$<span id="phone-productPriceUpdate">59</span></h5>
                         <img src="images/remove.png" alt="" class="remove-item">
                      </div>
                   </div>
@@ -65,9 +72,9 @@
                      </div>
 
                      <div class="col-md-4 status">
-                        <h5>$1,278</h5>
-                        <h5>$0</h5>
-                        <h5>$1,278</h5>
+                        <h5>$ <span id="totalProductPrice">0</span> </h5>
+                        <h5>$<span id="tax">0</span></h5>
+                        <h5>$ <span id="taxWithTotalPrice">0</span></h5>
                      </div>
                   </div>
                </div>
@@ -80,25 +87,146 @@
    </section>
 
    <script>
-     document.getElementById("increasement").addEventListener("click", function(){
-      var increment = document.getElementById("indevalue");
-      console.log(increment.value);
-      if(increment.value <= 0){
-         increment.value = 0;
-      }else{
-         increment.value = parseInt(increment.value) + 1;
-      }
-     });
 
-     document.getElementById("decreasement").addEventListener("click", function(){
-      var increment = document.getElementById("indevalue");
-      console.log(increment.value);
-      if(increment.value <= 1){
-         increment.value = 1;
-      }else{
-         increment.value = parseInt(increment.value) - 1;
+      function handelProductChange(product, isIncrease) {
+         const productInput = document.getElementById(product + '-quantity');
+         const productCount = parseInt(productInput.value);
+         //   const quantityNewCount = quantityCount -1;
+
+         let productNewCount = productCount;
+         if (isIncrease == false && productCount > 0) {
+            productNewCount = productCount - 1;
+         }
+         if (isIncrease == true) {
+            productNewCount = productCount + 1;
+         }
+         productInput.value = productNewCount;
+         console.log(productNewCount);
+         // const productPrice = quantityNewCount * 59;
+         let totalProduct = 0;
+         if (product == 'phone') {
+            totalProduct = productNewCount * 59;
+         }
+         if (product == 'case') {
+            totalProduct = productNewCount * 1219;
+         }
+
+         document.getElementById(product + '-productPriceUpdate').innerText = totalProduct;
+         calculateTotal();
       }
-     });
+
+
+      function calculateTotal() {
+         const caseInput = document.getElementById('case-quantity');
+         const caseCount = parseInt(caseInput.value);
+
+         const phoneInput = document.getElementById('phone-quantity');
+         const phoneCount = parseInt(phoneInput.value);
+
+         const totalPrice = caseCount * 1219 + phoneCount * 59;
+         document.getElementById('totalProductPrice').innerText = totalPrice;
+         const tax = Math.round(totalPrice * 0.1);
+         document.getElementById('tax').innerText = tax;
+
+         const taxWithTotalPrice = totalPrice + tax;
+         document.getElementById('taxWithTotalPrice').innerText = taxWithTotalPrice;
+
+      }
+      // document.getElementById('increase').addEventListener('click', function () {
+      //    priceHandle(true);
+      // });
+
+
+      // document.getElementById('decrease').addEventListener('click', function () {
+      //    priceHandle(false);
+      // });
+
+      // function priceHandle(inIncrease) {
+      //    const quantityInput = document.getElementById('quantity1');
+      //    const quantityCount = parseInt(quantityInput.value);
+      //    // const quantityNewCount = quantityCount -1;
+      //    let quantityNewCount = quantityCount;
+      //    if (inIncrease == false && quantityCount > 0) {
+      //       quantityNewCount = quantityCount - 1;
+      //    }
+      //    if (inIncrease == true ) {
+      //       quantityNewCount = quantityCount + 1;
+      //    }
+      //    quantityInput.value = quantityNewCount;
+      //    const productPrice = quantityNewCount * 1219;
+      //    document.getElementById('productPriceUpdate').innerText = productPrice;
+      //    console.log(productPrice);
+      // }
+
+      // function handelProductChange(isIncrease) {
+      //    const quantityInput = document.getElementById('quantity');
+      //    const quantityCount = parseInt(quantityInput.value);
+      //    //   const quantityNewCount = quantityCount -1;
+
+      //    let quantityNewCount = quantityCount;
+      //    if (isIncrease == false && quantityCount > 0) {
+      //       quantityNewCount = quantityCount - 1;
+      //    }
+      //    if (isIncrease == true) {
+      //       quantityNewCount = quantityCount + 1;
+      //    }
+      //    quantityInput.value = quantityNewCount;
+      //    console.log(quantityNewCount);
+      //    const productPrice = quantityNewCount * 59;
+
+      //    document.getElementById('productPriceUpdate').innerText = productPrice;
+      // }
+
+      // document.getElementById('increase').addEventListener('click', function(){
+      //    const quantityInput = document.getElementById('quantity1');
+      //    const quantityCount = parseInt(quantityInput.value);
+      //    const quantityNewCount = quantityCount + 1;
+      //    quantityInput.value = quantityNewCount;
+      //    const productPrice = quantityNewCount * 1219;
+      //    document.getElementById('productPriceUpdate').innerText = productPrice;
+      //    console.log(productPrice);
+
+      //  });
+      //  document.getElementById('decrease').addEventListener('click', function(){
+      //    const quantityInput = document.getElementById('quantity1');
+      //    const quantityCount = parseInt(quantityInput.value);
+      //    const quantityNewCount = quantityCount -1;
+      //    quantityInput.value = quantityNewCount;
+      //    const productPrice = quantityNewCount * 1219;
+      //    document.getElementById('productPriceUpdate').innerText = productPrice;
+      //    console.log(productPrice);
+      //  });
+
+
+
+
+      // document.getElementById('increase').addEventListener('click', function () {
+      //    handelProductChange(true);
+      // });
+
+      // document.getElementById('decrease').addEventListener('click', function () {
+      //    handelProductChange(false);
+      // });
+
+      // document.getElementById('increase').addEventListener('click', function () {
+      //    const quantityInput = document.getElementById('quantity');
+      //    const quantityCount = parseInt(quantityInput.value);
+      //    const quantityNewCount = quantityCount + 1;
+      //    quantityInput.value = quantityNewCount;
+      //    const productPrice = quantityNewCount * 59;
+      //    document.getElementById('productPriceUpdate').innerText = productPrice;
+      // });
+
+      // document.getElementById('decrease').addEventListener('click', function(){
+      //   const quantityInput = document.getElementById('quantity');
+      //   const quantityCount = parseInt(quantityInput.value);
+      //   const quantityNewCount = quantityCount -1;
+      //   quantityInput.value = quantityNewCount;
+      //   const productPrice = quantityNewCount * 59;
+      //   document.getElementById('productPriceUpdate').innerText = productPrice;
+      //   console.log(quantityInput.value);
+      // });
+
    </script>
 </body>
 
